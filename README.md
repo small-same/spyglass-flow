@@ -144,8 +144,3 @@ does, so check full paths before assigning blame.
 No RTL, netlists, timing libraries, vendor documentation or real violation
 reports — none of that is mine to publish, and `.gitignore` is set up to keep
 it out. This repo is the harness only.
-
-## License
-
-MIT, see [LICENSE](LICENSE). SpyGlass is a Synopsys product; this project is
-not affiliated with or endorsed by Synopsys.
