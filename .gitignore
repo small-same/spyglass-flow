@@ -1,0 +1,35 @@
+# ---- SpyGlass run output -----------------------------------------------
+work/
+logs/
+reports/
+spyglass_reports/
+*.rpt
+*.log
+*.vdb
+sgdc_generated/
+
+# ---- Design data: never commit -----------------------------------------
+# RTL, netlists, timing libraries and vendor documentation are not ours
+# to publish. Keep them outside the repo or ignored here.
+*.v
+*.sv
+*.vhd
+*.lib
+*.db
+*.sglib
+*.gds*
+*.lef
+*.sdc
+*.upf
+*.pdf
+collected_libs/
+lib_list.f
+DUT/
+
+# ---- Misc ---------------------------------------------------------------
+*.tar
+*.zip
+__pycache__/
+*.pyc
+.DS_Store
+.claude/

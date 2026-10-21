@@ -1,0 +1,58 @@
+#############################################################
+# SpyGlass Lint Project File (lint.prj)
+#
+# 用法（batch mode）:
+#   spyglass -project lint.prj -goal lint/lint_rtl -batch
+#
+# 用法（GUI）:
+#   spyglass -project lint.prj
+#############################################################
+
+##### 1. 讀 design #####
+# 用 filelist（-f 檔）
+read_file -type sourcelist ./filelist.f
+
+# 或個別指定檔案
+# read_file -type verilog   ./rtl/top.v
+# read_file -type verilog   ./rtl/sub_module.sv
+# read_file -type vhdl      ./rtl/legacy.vhd
+
+##### 2. 基本 options #####
+set_option projectwdir  .
+set_option top          top_module
+
+# SystemVerilog 支援
+set_option enableSV09   yes
+# 混合語言時
+# set_option language_mode mixed
+
+# include path 與 define
+set_option incdir  { ./rtl/include }
+set_option define  { SYNTHESIS FPGA=0 }
+
+##### 3. Blackbox / IP 處理 #####
+# 不檢查內部的 module（memory、analog macro、第三方 IP）
+set_option stop { sram_wrapper analog_macro }
+
+# 如果有 .lib 可以讀進來讓 blackbox 邊界資訊更完整
+# read_file -type gateslib ./libs/tech.lib
+
+##### 4. 常用雜項 #####
+# 允許同名 module 覆寫（重複定義取最後一個）
+# set_option allow_module_override yes
+
+# memory 推斷處理
+set_option handlememory yes
+
+# 報告語言
+# set_option report_style std
+
+##### 5. Waiver #####
+read_file -type awl ./waivers.awl
+
+##### 6. Goal 專屬設定（可選）#####
+current_goal lint/lint_rtl -top top_module
+# 關掉個別 rule
+# set_goal_option ignorerules { W240 W528 }
+# 只跑特定 rule
+# set_goal_option addrules { W415a W164a W164b }

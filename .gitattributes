@@ -1,0 +1,9 @@
+# These run on Linux build hosts; CRLF breaks shell shebangs and Tcl parsing.
+* text=auto eol=lf
+*.sh   text eol=lf
+*.tcl  text eol=lf
+*.awl  text eol=lf
+*.sgdc text eol=lf
+*.prj  text eol=lf
+*.f    text eol=lf
+Makefile text eol=lf

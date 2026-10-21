@@ -1,0 +1,45 @@
+###########################################################################
+# top.sgdc — SpyGlass Design Constraints (example; replace with your design)
+# Shared by CDC / RDC / Constraints / DFT
+#
+# RULE: every SGDC command below (clock/reset/sdc_data/...) applies to the
+# design unit named by the most recent current_design. sdc_data in
+# particular MUST come after current_design, otherwise SpyGlass aborts with
+#     SGDCSTX_010: Missing current_design specification ...
+###########################################################################
+
+current_design chip_top
+
+##### SDC hookup (sdc2sgdc) ###############################################
+# Point SpyGlass at your STA SDC; it auto-translates to SGDC and merges with
+# the clock/reset declarations below (on conflict, SDC wins). In sg_shell the
+# sdc2sgdc option turns on automatically once an sdc_data line is present.
+#
+# The -file path is relative to the RUN directory (where you launch `make`),
+# NOT to this .sgdc file. Use an absolute path if in doubt.
+sdc_data -file constraints/func.sdc -mode func
+# Multiple modes are allowed:
+# sdc_data -file constraints/test.sdc -mode test
+
+##### Clocks (foundation of CDC: declare EVERY clock with its domain) #####
+# Anything already defined in the SDC via create_clock does NOT need to be
+# repeated here — sdc2sgdc pulls those in. Add only clocks the SDC lacks.
+clock -name "clk_sys"   -domain d_sys
+clock -name "clk_usb"   -domain d_usb
+# Generated clock example:
+# clock -name "u_pll/clk_out" -domain d_sys
+
+##### Resets (foundation of RDC) ##########################################
+reset -name "rst_sys_n" -value 0
+reset -name "rst_usb_n" -value 0
+
+##### Common additional declarations ######################################
+# Quasi-static signals (config register outputs, no sync needed):
+# quasi_static -name "reg_cfg*"
+# Approved synchronizer cell (in-house 2FF cell):
+# sync_cell -name "SYNC2FF_CELL"
+# Clock domain of input ports:
+# input -name "i_usb_data*" -clock clk_usb
+
+##### DFT (test-mode condition example) ###################################
+# test_mode -name "test_en" -value 1

@@ -1,0 +1,35 @@
+###########################################################################
+# lint.awl - waivers for the lint flow.
+#
+# run_flow.tcl auto-loads waivers/<flow>.awl, so create waivers/cdc.awl,
+# waivers/dft.awl and so on the same way; they stay independent.
+#
+# Note the file form uses -rule (singular). The sg_shell command form uses
+# -rules (plural). See docs/waivers.md.
+#
+# Every waiver carries a -comment: a waiver report is only as reviewable as
+# the reasons in it.
+###########################################################################
+
+# ---- Examples; uncomment and adapt --------------------------------------
+
+# Initial value at declaration is ignored by synthesis. Real sim/synth
+# mismatch risk, so waive it only where the team has agreed to.
+# waive -rule { SYNTH_89 } -comment "reviewed, reset value used in RTL"
+
+# Redundant $signed/$unsigned conversion, no functional impact.
+# waive -rule { WRN_1024 } -comment "redundant signed/unsigned cast"
+
+# Latch-based register-file arrays: the latches are the design.
+# -regexp is required for the wildcard; plain -du is an exact match.
+# waive -regexp -du "SRAM_.*_ARRAY" -rule { InferLatch } -comment "latch-based RF array, intended"
+
+# Verified IP: silence the internals, keep the integration checks.
+# waive -ip "MY_FIFO_IP" -comment "vendor IP, pre-verified"
+
+# A flattened chip netlist makes some RTL-style rules structurally inevitable
+# (internal clocks are never DU inputs; generated netlists are positional).
+# waive -file "./DUT/chip_netlist.v" -rule { W401 W146 } -comment "flattened netlist"
+
+# Intentional black boxes - do not report the missing definition.
+# waive -du "ANALOG_MACRO" -rule { ErrorAnalyzeBBox } -comment "analog macro"
